@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+  <title>CSRF-token</title>
+  <script>
+   
+    async function fetchCSRFToken() {
+      try {
+        const response = await fetch('/csrf-token'); 
+        const data = await response.json();
+
+      
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_csrf';
+        csrfInput.value = data.csrfToken;
+
+        
+        const form = document.querySelector('form');
+        form.appendChild(csrfInput);
+      } catch (error) {
+        console.error('Kunde inte hämta CSRF-token:', error);
+      }
+    }
+    
+    window.onload = fetchCSRFToken;
+  </script>
+</head>
+<body>
+  <h1>CSRF-token exempel</h1>
+  <form action="/submit" method="POST">
+    <label for="data">Data:</label>
+    <input type="text" id="data" name="data" required>
+    <input type="hidden" name="_csrf" value="">
+    <button type="submit">Skicka</button>
+  </form>
+</body>
+</html>
